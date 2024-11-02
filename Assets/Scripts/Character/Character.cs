@@ -4,11 +4,10 @@ using UnityEngine.AI;
 public class Character : MonoBehaviour, IDamageable, IDetonatable
 {
     [Header("Configs")]
-    [SerializeField] private float _maxSpeed;
-    [SerializeField] private int _maxHealth;
-
-    private int _percentWoundedForSlowing = 30;
-    private int _currentHealth;
+    [SerializeField] private float _maxSpeed;   
+    
+    private Health _health;
+    private int _percentWoundedForSlowing = 30;   
 
     private float _timeExplosionMax = 0.15f;
     private float _currentTimeExplosion;
@@ -26,7 +25,7 @@ public class Character : MonoBehaviour, IDamageable, IDetonatable
     [field: SerializeField] public bool _isAlive { get; private set; }
     [field: SerializeField] public bool IsDetonate { get; private set; }
 
-    public void Initialize(InputHandler inputHandler, ScreenClickHandler screenClickHandler)
+    public void Initialize(InputHandler inputHandler, ScreenClickHandler screenClickHandler, Health health)
     {
         _inputHandler = inputHandler;
         _screenClickHandler = screenClickHandler;
@@ -36,7 +35,8 @@ public class Character : MonoBehaviour, IDamageable, IDetonatable
         _view = GetComponentInChildren<CharacterView>();
         _view.Initialise();
 
-        _currentHealth = _maxHealth;
+        _health = health;       
+       
         _isAlive = true;
         _view.StopWoundedWalk();
         _characterStateSwitcher = new CharacterStateSwitcher(_inputHandler, _screenClickHandler, this);
@@ -62,21 +62,16 @@ public class Character : MonoBehaviour, IDamageable, IDetonatable
 
     public void TakeDamage(int damage)
     {
-        if (_currentHealth < 0)
-            Debug.LogError($" Внимание! попытка нанести урон, когда уровень здоровья равен {_currentHealth}");
+        _health.Reduce(damage);
 
-        _currentHealth -= damage;
-
-        if (_currentHealth <= 0)
+        if (_health.Value <= 0)
         {
-            _currentHealth = 0;
-
             ToDie();
 
             return;
         }
 
-        if (_currentHealth < (_maxHealth * _percentWoundedForSlowing) / 100)
+        if (_health.Value < (_health._maxHealth * _percentWoundedForSlowing) / 100)
         {
             float SlowSpeed = _maxSpeed / 3f;
 
@@ -85,7 +80,7 @@ public class Character : MonoBehaviour, IDamageable, IDetonatable
         }
 
         _characterStateSwitcher.SetCharacterState(_characterStateSwitcher._takeDamageState);
-        Debug.Log($" У игрока осталось здоровья {_currentHealth}");
+        Debug.Log($" У игрока осталось здоровья {_health}");
     }
 
     public void OnDetonate(Vector3 detonateDirection, float detonateStrenght, int damage)
@@ -122,7 +117,7 @@ public class Character : MonoBehaviour, IDamageable, IDetonatable
 
         _isAlive = false;
 
-        Debug.Log($" Игрок мертв! Уровень здоровья = {_currentHealth}");
+        Debug.Log($" Игрок мертв! Уровень здоровья = {_health}");
     }
 
 

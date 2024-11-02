@@ -2874,7 +2874,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSpeed: 3
-  _maxHealth: 50
   <_isAlive>k__BackingField: 0
   <IsDetonate>k__BackingField: 0
 --- !u!95 &1922888409
