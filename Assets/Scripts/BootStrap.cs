@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BootStrap : MonoBehaviour
+public class Bootstrap : MonoBehaviour
 {
     [SerializeField] private LayerMask _groundlayerMask;
     [SerializeField] private Transform _targetAgentPositionPrefab;
