@@ -30,7 +30,7 @@ public class Mine : MonoBehaviour
         if (_isDetonate == false)
             return;
 
-        StartTimerToDetonate();
+        OnTimerToDetonate();
     }
 
     private void OnDrawGizmos()
@@ -53,7 +53,7 @@ public class Mine : MonoBehaviour
         }
     }
 
-    private void StartTimerToDetonate()
+    private void OnTimerToDetonate()
     {
         _currentTimer -= Time.deltaTime;
 

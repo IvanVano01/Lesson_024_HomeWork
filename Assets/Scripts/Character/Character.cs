@@ -30,23 +30,17 @@ public class Character : MonoBehaviour, IDamageable, IDetonatable
     {
         _inputHandler = inputHandler;
         _screenClickHandler = screenClickHandler;
-    }
 
-    private void Awake()
-    {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = _maxSpeed;
         _view = GetComponentInChildren<CharacterView>();
         _view.Initialise();
-    }
 
-    private void Start()
-    {
         _currentHealth = _maxHealth;
         _isAlive = true;
         _view.StopWoundedWalk();
         _characterStateSwitcher = new CharacterStateSwitcher(_inputHandler, _screenClickHandler, this);
-    }
+    }   
 
     private void Update()
     {
